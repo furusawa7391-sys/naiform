@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>動詞「ない形」練習ゲーム</title>
+  <style>
+    body { font-family: sans-serif; max-width: 500px; margin: 50px auto; text-align: center; }
+    input { font-size: 16px; padding: 5px; width: 80%; }
+    button { font-size: 16px; padding: 5px 10px; margin-top: 10px; }
+    #timer { font-weight: bold; margin: 10px; }
+    #score { font-weight: bold; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>動詞「ない形」練習ゲーム</h1>
+  <div id="question"></div>
+  <input type="text" id="answer" placeholder="ない形を入力">
+  <div id="timer">残り時間: 10秒</div>
+  <button onclick="submitAnswer()">送信</button>
+  <div id="score"></div>
+
+  <script>
+    const verbs = ["おぼえます","わすれます","なくします","はらいます","かえします","かります","かします","でかけます","いきます","かえります","きます","します","ぬぎます","しんぱいします","のみます","たべます","はなします","かきます","ききます","よみます","はたらきます","おわります","はじめます","かいます","うります","たちます","すわります","あけます","しめます","つけます","けします","ならいます","おしえます","みます","わかります","います","やすみます","あそびます","およぎます","みせます","とります"];
+
+    const negativeForms = {
+      "おぼえます":"おぼえない",
+      "わすれます":"わすれない",
+      "なくします":"なくさない",
+      "はらいます":"はらわない",
+      "かえします":"かえさない",
+      "かります":"かりない",
+      "かします":"かさない",
+      "でかけます":"でかけない",
+      "いきます":"いかない",
+      "かえります":"かえらない",
+      "きます":"こない",
+      "します":"しない",
+      "ぬぎます":"ぬがない",
+      "しんぱいします":"しんぱいしない",
+      "のみます":"のまない",
+      "たべます":"たべない",
+      "はなします":"はなさない",
+      "かきます":"かかない",
+      "ききます":"きかない",
+      "よみます":"よまない",
+      "はたらきます":"はたらかない",
+      "おわります":"おわらない",
+      "はじめます":"はじめない",
+      "かいます":"かわない",
+      "うります":"うらない",
+      "たちます":"たたない",
+      "すわります":"すわらない",
+      "あけます":"あけない",
+      "しめます":"しめない",
+      "つけます":"つけない",
+      "けします":"けさない",
+      "ならいます":"ならわない",
+      "おしえます":"おしえない",
+      "みます":"みない",
+      "わかります":"わからない",
+      "います":"いない",
+      "やすみます":"やすまない",
+      "あそびます":"あそばない",
+      "およぎます":"およがない",
+      "みせます":"みせない",
+      "とります":"とらない"
+    };
+
+    let currentIndex = 0;
+    let score = 0;
+    let retries = 1;
+    let timer;
+    let timeLeft = 10;
+
+    function showQuestion() {
+      if(currentIndex >= verbs.length){
+        document.getElementById("question").innerHTML = "<h2>終了！</h2>";
+        document.getElementById("answer").style.display = "none";
+        document.getElementById("timer").style.display = "none";
+        document.getElementById("score").innerText = "正答数: " + score + " / " + verbs.length;
+        return;
+      }
+      document.getElementById("question").innerText = verbs[currentIndex];
+      document.getElementById("answer").value = "";
+      document.getElementById("answer").focus();
+      retries = 1;
+      timeLeft = 10;
+      document.getElementById("timer").innerText = "残り時間: " + timeLeft + "秒";
+      clearInterval(timer);
+      timer = setInterval(countdown, 1000);
+    }
+
+    function countdown() {
+      timeLeft--;
+      document.getElementById("timer").innerText = "残り時間: " + timeLeft + "秒";
+      if(timeLeft <= 0){
+        clearInterval(timer);
+        nextQuestion();
+      }
+    }
+
+    function submitAnswer() {
+      const userAnswer = document.getElementById("answer").value.trim();
+      if(userAnswer === negativeForms[verbs[currentIndex]]){
+        score++;
+        nextQuestion();
+      } else {
+        if(retries > 0){
+          retries--;
+          alert("不正解です。もう一度だけ挑戦できます。");
+        } else {
+          nextQuestion();
+        }
+      }
+    }
+
+    function nextQuestion() {
+      clearInterval(timer);
+      currentIndex++;
+      showQuestion();
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
